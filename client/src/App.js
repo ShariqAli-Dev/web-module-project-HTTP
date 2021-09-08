@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 import { Route, Switch, Redirect } from 'react-router-dom';
 import MovieList from './components/MovieList';
@@ -8,8 +9,7 @@ import MovieHeader from './components/MovieHeader';
 
 import EditMovieForm from './components/EditMovieForm';
 import FavoriteMovieList from './components/FavoriteMovieList';
-
-import axios from 'axios';
+import AddMovieForm from './components/AddMovieForm';
 
 const App = (props) => {
   const [movies, setMovies] = useState([]);
@@ -34,6 +34,18 @@ const App = (props) => {
       })
       .catch((err) => {
         console.log('Error deleting movie :(\n', err);
+      });
+  };
+
+  const addMovie = (movie) => {
+    axios
+      .post('http://localhost:5000/api/movies', movie)
+      .then((res) => {
+        setMovies(res.data);
+      })
+      .catch((err) => {
+        console.log('Eerror adding new movie');
+        console.log(err);
       });
   };
 
@@ -63,6 +75,10 @@ const App = (props) => {
                 deleteMovie={deleteMovie}
                 addToFavorites={addToFavorites}
               />
+            </Route>
+
+            <Route path='/new-movie'>
+              <AddMovieForm addMovie={addMovie} />
             </Route>
 
             <Route path='/movies'>
