@@ -20,6 +20,8 @@ const App = (props) => {
       .get('http://localhost:5000/api/movies')
       .then((res) => {
         setMovies(res.data);
+        setFavoriteMovies(res.data.filter(({ favorite }) => favorite));
+        // set favorite movies here with a filter
       })
       .catch((err) => {
         console.log(err);
@@ -49,7 +51,22 @@ const App = (props) => {
       });
   };
 
-  const addToFavorites = (movie) => {};
+  const addToFavorites = (movie) => {
+    axios
+      .put(`http://localhost:5000/api/movies/${movie.id}`, {
+        ...movie,
+        favorite: true,
+      })
+      .then((res) => {
+        console.log(res.data);
+        setFavoriteMovies(
+          [...favoriteMovies, ...res.data].filter(({ favorite }) => favorite)
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <div>
