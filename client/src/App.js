@@ -21,7 +21,6 @@ const App = (props) => {
       .then((res) => {
         setMovies(res.data);
         setFavoriteMovies(res.data.filter(({ favorite }) => favorite));
-        // set favorite movies here with a filter
       })
       .catch((err) => {
         console.log(err);
